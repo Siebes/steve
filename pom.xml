@@ -40,7 +40,7 @@
         <jackson.version>2.9.6</jackson.version>
 
         <!-- In Mysql: schema == database (http://dev.mysql.com/doc/refman/5.6/en/glossary.html#glos_schema) -->
-        <jdbcUrl>jdbc:mysql://${db.ip}:${db.port}/${db.schema}?useSSL=true&amp;serverTimezone=UTC</jdbcUrl>
+        <jdbcUrl>jdbc:mysql://${db.ip}:${db.port}/${db.schema}?useSSL=false&amp;allowPublicKeyRetrieval=true&amp;serverTimezone=UTC</jdbcUrl>
     </properties>
 
     <profiles>
@@ -380,6 +380,20 @@
                     </generator>
                 </configuration>
             </plugin>
+
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <version>2.1.0.RELEASE</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>repackage</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
         </plugins>
     </build>
 

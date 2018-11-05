@@ -50,6 +50,9 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         final String prefix = "/manager/";
         http
+            .csrf()
+                .ignoringAntMatchers(prefix + "rest/**")
+                .and()
             .authorizeRequests()
                 .antMatchers(prefix + "**").hasRole("ADMIN")
                 .and()
