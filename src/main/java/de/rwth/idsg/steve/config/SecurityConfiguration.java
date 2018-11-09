@@ -52,6 +52,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         http
             .csrf()
                 .ignoringAntMatchers(prefix + "rest/**")
+                .ignoringAntMatchers(prefix + "signin")
                 .and()
             .authorizeRequests()
                 .antMatchers(prefix + "**").hasRole("ADMIN")

@@ -5,11 +5,13 @@ import lombok.extern.slf4j.Slf4j;
 import org.joda.time.LocalDate;
 import org.joda.time.LocalDateTime;
 import org.springframework.beans.propertyeditors.StringTrimmerEditor;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.view.json.MappingJackson2JsonView;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
@@ -39,9 +41,16 @@ public class GlobalControllerAdvice {
     public ModelAndView handleError(HttpServletRequest req, Exception exception) {
         log.error("Request: {} raised following exception.", req.getRequestURL(), exception);
 
-        ModelAndView mav = new ModelAndView();
-        mav.addObject("exception", exception);
-        mav.setViewName("00-error");
+        ModelAndView mav = null;
+        if(req.getRequestURI().contains("/manager/rest")) {
+            mav = new ModelAndView(new MappingJackson2JsonView());
+            mav.setStatus(HttpStatus.INTERNAL_SERVER_ERROR);
+            mav.addObject("error", exception.getMessage());
+        } else {
+            mav = new ModelAndView();
+            mav.addObject("exception", exception);
+            mav.setViewName("00-error");
+        }
         return mav;
     }
 }
